@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jansen Valentine | Haute Couture</title>
+    
+    <!-- Definição do Favicon Oficial da Boutique -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Tailwind CSS CDN para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display para títulos sofisticados e Montserrat para corpo de texto limpo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Lucide Icons para vetores limpos e minimalistas -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050505;
+            color: #f5f5f5;
+        }
+        .font-serif-lux {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Scrollbar personalizada para manter a elegância */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #333;
+        }
+        /* Efeito de fade-in para carregamento suave dos elementos */
+        .fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased">
+
+    <!-- Header / Barra de Navegação Minimalista -->
+    <header class="border-b border-neutral-900 sticky top-0 bg-[#050505]/95 backdrop-blur-md z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
+            
+            <!-- Logótipo Oficial Ampliado da Jansen Valentine (Puro, sem moldura ou círculos) -->
+            <a href="#" class="flex items-center group">
+                <img 
+                    src="logo.png" 
+                    alt="Jansen Valentine" 
+                    class="h-16 sm:h-24 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                    onerror="this.src='https://placehold.co/300x100/0d0d0d/ffffff?text=Jansen+Valentine';"
+                >
+            </a>
+            
+            <!-- Menu de Ações (Instagram e Suporte VIP) à direita do Logótipo -->
+            <div class="flex items-center space-x-4 sm:space-x-6 text-neutral-400">
+                <a href="https://instagram.com/jansen_valentine" target="_blank" class="text-neutral-400 hover:text-[#d4af37] transition-colors duration-300" title="Siga-nos no Instagram">
+                    <i data-lucide="instagram" class="w-4 h-4"></i>
+                </a>
+                <a href="https://wa.me/5598985867414" target="_blank" class="text-[10px] sm:text-xs tracking-widest uppercase text-[#d4af37] hover:text-[#e5c158] transition-colors duration-300 font-medium flex items-center gap-1.5">
+                    <i data-lucide="phone" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i> Suporte VIP
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção Principal do Catálogo -->
+    <div id="main-content-area">
+        <!-- Banner Hero de Apresentação -->
+        <section id="hero-banner" class="relative py-16 sm:py-24 px-4 sm:px-6 border-b border-neutral-900 bg-gradient-to-b from-neutral-950 to-[#050505] overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.03)_0%,transparent_70%)] pointer-events-none"></div>
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <span class="text-[9px] sm:text-[10px] tracking-[0.35em] sm:tracking-[0.4em] uppercase text-[#d4af37] block mb-4 font-semibold">Ready to Wear & Custom Couture</span>
+                <h1 class="font-serif-lux text-3xl sm:text-4xl md:text-6xl text-white font-light mb-6 tracking-wide leading-tight px-2">
+                    A expressão máxima da <br><span class="italic text-neutral-300">alta-costura contemporânea</span>
+                </h1>
+                <p class="text-neutral-400 text-xs sm:text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed mb-8 px-4">
+                    Peças exclusivas desenhadas artesanalmente, unindo a precisão da costura tradicional ao design de luxo minimalista. Explore o nosso catálogo.
+                </p>
+                <div class="w-12 h-[1px] bg-[#d4af37] mx-auto"></div>
+            </div>
+        </section>
+
+        <!-- Catálogo de Produtos Principal -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 w-full">
+            <!-- Filtros e Status -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 sm:mb-12 pb-4 border-b border-neutral-900">
+                <div>
+                    <h2 class="text-xs uppercase tracking-[0.2em] font-semibold text-neutral-300">Catálogo Exclusivo</h2>
+                    <p id="product-count" class="text-xs text-neutral-500 mt-1">A carregar acervo...</p>
+                </div>
+                <div class="flex flex-wrap gap-2 sm:gap-3">
+                    <button onclick="filterCategory('todos')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs tracking-wider border border-neutral-800 bg-neutral-900 text-neutral-100 hover:border-[#d4af37] transition-all duration-300" data-cat="todos">Todos</button>
+                    <button onclick="filterCategory('Vestuário')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs tracking-wider border border-transparent text-neutral-400 hover:text-white transition-all duration-300" data-cat="Vestuário">Vestuário</button>
+                    <button onclick="filterCategory('Acessórios')" class="cat-filter-btn px-4 py-1.5 rounded-full text-xs tracking-wider border border-transparent text-neutral-400 hover:text-white transition-all duration-300" data-cat="Acessórios">Acessórios</button>
+                </div>
+            </div>
+
+            <!-- Feedback UI para carregamento e erros -->
+            <div id="loader" class="flex flex-col items-center justify-center py-20">
+                <div class="w-10 h-10 border-2 border-[#d4af37] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-xs text-neutral-400 tracking-widest uppercase">A consultar acervo digital...</p>
+            </div>
+
+            <div id="error-box" class="hidden text-center py-16 bg-neutral-950 border border-neutral-900 rounded-none max-w-lg mx-auto p-6 sm:p-8 fade-in">
+                <i data-lucide="alert-triangle" class="w-10 h-10 text-red-500 mx-auto mb-4"></i>
+                <h3 class="font-serif-lux text-lg mb-2">Ligação Necessária</h3>
+                <p id="error-message" class="text-xs text-neutral-400 leading-relaxed mb-6">Introduza as suas credenciais do Supabase no topo do script para ligar a loja ao banco de dados.</p>
+            </div>
+
+            <div id="empty-state" class="hidden text-center py-24 fade-in">
+                <i data-lucide="archive" class="w-8 h-8 text-neutral-600 mx-auto mb-4"></i>
+                <p class="text-xs tracking-widest uppercase text-neutral-400">Nenhum produto disponível de momento</p>
+                <p class="text-xs text-neutral-600 mt-1">Os nossos designers estão a desenvolver a próxima coleção de ateliê.</p>
+            </div>
+
+            <!-- Grid de Produtos -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-12 sm:gap-y-16">
+                <!-- Os cartões dos produtos serão renderizados aqui dinamicamente -->
+            </div>
+        </main>
+
+        <!-- Seção de Integração com o Instagram -->
+        <section class="border-t border-neutral-900 bg-neutral-950/40 py-16 px-4 text-center">
+            <div class="max-w-md mx-auto space-y-4">
+                <i data-lucide="instagram" class="w-8 h-8 text-[#d4af37] mx-auto"></i>
+                <h3 class="font-serif-lux text-xl text-neutral-200">Siga o Nosso Ateliê</h3>
+                <p class="text-xs text-neutral-400 leading-relaxed">
+                    Acompanhe de perto os bastidores da alta-costura, novos lançamentos e inspirações diárias da <span class="text-neutral-200">@jansen_valentine</span>.
+                </p>
+                <div class="pt-2">
+                    <a href="https://instagram.com/jansen_valentine" target="_blank" class="inline-block px-6 py-2.5 border border-[#d4af37] text-[#d4af37] text-xs uppercase tracking-widest hover:bg-[#d4af37] hover:text-black transition-all duration-300">
+                        Abrir Perfil no Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal / Vista de Detalhes do Produto (Sobreposição de Ecrã Inteiro) -->
+    <div id="product-modal" class="fixed inset-0 bg-[#050505] z-50 overflow-y-auto hidden opacity-0 transition-opacity duration-300 flex items-center justify-center">
+        <div class="min-h-screen w-full flex flex-col justify-between py-4 sm:py-6 px-4 sm:px-8 md:px-12 max-w-7xl mx-auto relative">
+            
+            <!-- Barra superior de controlo -->
+            <div class="flex items-center justify-between py-3 border-b border-neutral-900">
+                <button onclick="closeProductDetails()" class="flex items-center gap-2 group text-neutral-400 hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-left" class="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1"></i>
+                    <span class="text-xs tracking-widest uppercase">Voltar</span>
+                </button>
+                <div class="tracking-[0.2em] uppercase text-[9px] sm:text-[10px] text-neutral-500 font-light">
+                    Jansen Valentine <span class="text-[#d4af37]">VIP</span> Catalog
+                </div>
+            </div>
+
+            <!-- Corpo dos Detalhes do Produto -->
+            <div id="modal-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-16 py-6 sm:py-12 items-start">
+                <div class="col-span-12 py-20 text-center text-neutral-400">
+                    A carregar detalhes exclusivos da peça...
+                </div>
+            </div>
+
+            <!-- Rodapé da modal -->
+            <div class="border-t border-neutral-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[9px] sm:text-[10px] text-neutral-600 tracking-wider">
+                <p class="text-center sm:text-left">© 2026 JANSEN VALENTINE. TODOS OS DIREITOS RESERVADOS.</p>
+                <p class="text-center sm:text-right">ATENDIMENTO EXCLUSIVO SOB DEMANDA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção SPA: Termos de Utilização -->
+    <div id="terms-section" class="fixed inset-0 bg-[#050505] z-50 overflow-y-auto hidden opacity-0 transition-opacity duration-300 flex items-center justify-center">
+        <div class="min-h-screen w-full flex flex-col justify-between py-6 px-4 sm:px-8 md:px-12 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between py-4 border-b border-neutral-900">
+                <button onclick="goBackHome()" class="flex items-center gap-2 group text-neutral-400 hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span class="text-xs tracking-widest uppercase">Voltar ao Início</span>
+                </button>
+                <span class="text-[9px] text-[#d4af37] tracking-widest uppercase">Termos de Utilização</span>
+            </div>
+
+            <div class="py-8 space-y-6 text-neutral-400 text-xs sm:text-sm leading-relaxed font-light">
+                <h1 class="font-serif-lux text-2xl text-white tracking-wide">Termos de Utilização</h1>
+                <p class="text-[10px] text-neutral-500 uppercase tracking-wider -mt-4">Última atualização: Maio de 2026</p>
+                
+                <p>Bem-vindo à boutique online Jansen Valentine. Ao aceder ao nosso catálogo digital, concorda em cumprir e estar vinculado aos seguintes termos de utilização.</p>
+                
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">1. Peças de Ateliê e Produção</h3>
+                <p>Todas as peças apresentadas no nosso acervo são criadas sob encomenda ou em lotes altamente restritos de ateliê. As fotografias mostradas tentam traduzir com máxima fidelidade as texturas e tonalidades reais do produto físico.</p>
+
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">2. Processo de Encomenda via WhatsApp</h3>
+                <p>O fecho de compras da marca é realizado de forma personalizada e direta via canal oficial de suporte por WhatsApp. O envio da intenção de encomenda não reserva imediatamente o stock da peça até confirmação de um dos nossos alfaiates e processamento do respetivo pagamento.</p>
+
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">3. Propriedade Intelectual</h3>
+                <p>O design, logótipo, fotografias conceituais e marcas comerciais associadas à Jansen Valentine são de nossa propriedade intelectual exclusiva, sendo proibida qualquer reprodução não autorizada.</p>
+            </div>
+
+            <div class="border-t border-neutral-900 pt-6 text-[10px] text-neutral-600 text-center uppercase tracking-wider">
+                Jansen Valentine Legal Department
+            </div>
+        </div>
+    </div>
+
+    <!-- Secção SPA: Política de Privacidade -->
+    <div id="privacy-section" class="fixed inset-0 bg-[#050505] z-50 overflow-y-auto hidden opacity-0 transition-opacity duration-300 flex items-center justify-center">
+        <div class="min-h-screen w-full flex flex-col justify-between py-6 px-4 sm:px-8 md:px-12 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between py-4 border-b border-neutral-900">
+                <button onclick="goBackHome()" class="flex items-center gap-2 group text-neutral-400 hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span class="text-xs tracking-widest uppercase">Voltar ao Início</span>
+                </button>
+                <span class="text-[9px] text-[#d4af37] tracking-widest uppercase">Política de Privacidade</span>
+            </div>
+
+            <div class="py-8 space-y-6 text-neutral-400 text-xs sm:text-sm leading-relaxed font-light">
+                <h1 class="font-serif-lux text-2xl text-white tracking-wide">Política de Privacidade</h1>
+                <p class="text-[10px] text-neutral-500 uppercase tracking-wider -mt-4">Última atualização: Maio de 2026</p>
+                
+                <p>Para a Jansen Valentine, a privacidade dos seus clientes e utilizadores é um compromisso fundamental de segurança operacional.</p>
+                
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">1. Recolha de Dados</h3>
+                <p>Não recolhemos informações sensíveis ou perfis comportamentais de navegação automática no nosso site institucional. Os dados de contacto enviados ao interagir com o botão de WhatsApp (como Nome, Medidas e Opções) servem exclusivamente para o atendimento individualizado e processamento do seu pedido.</p>
+
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">2. Encriptação e Segurança</h3>
+                <p>A infraestrutura de dados que serve o nosso catálogo está protegida via canais seguros na nuvem utilizando o Supabase, garantindo que nenhuma informação de produto ou dados cadastrais externos fiquem expostos na rede.</p>
+
+                <h3 class="text-white font-medium uppercase tracking-wider text-xs pt-2">3. Direitos dos Utilizadores</h3>
+                <p>Pode solicitar a qualquer momento a retificação, alteração ou eliminação definitiva dos seus registos de dados de contacto mantidos na nossa lista de atendimento VIP, através do nosso canal direto.</p>
+            </div>
+
+            <div class="border-t border-neutral-900 pt-6 text-[10px] text-neutral-600 text-center uppercase tracking-wider">
+                Jansen Valentine Privacy Protocol
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Público -->
+    <footer class="bg-neutral-950 border-t border-neutral-900 py-12 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            
+            <!-- Logótipo do Rodapé Oficial Ampliado da Boutique (Puro, sem moldura ou círculos) -->
+            <div class="flex flex-col items-center md:items-start">
+                <img 
+                    src="logo.png" 
+                    alt="Jansen Valentine" 
+                    class="h-14 sm:h-18 w-auto object-contain mb-2" 
+                    onerror="this.src='https://placehold.co/150x60/0d0d0d/ffffff?text=Jansen+Valentine';"
+                >
+            </div>
+            
+            <p class="text-xs text-neutral-500 font-light text-center md:text-right leading-relaxed max-w-md">
+                Estilo clássico redefinido. Peças desenhadas de forma ecologicamente consciente e produzidas sob demanda por mestres alfaiates.
+            </p>
+        </div>
+        
+        <!-- Ligações Úteis SPA (Termos e Privacidade) -->
+        <div class="max-w-7xl mx-auto flex justify-center gap-6 mt-8 text-[10px] text-neutral-500 tracking-wider uppercase">
+            <a href="#termos" class="hover:text-[#d4af37] transition-colors duration-300">Termos de Utilização</a>
+            <span>•</span>
+            <a href="#privacidade" class="hover:text-[#d4af37] transition-colors duration-300">Política de Privacidade</a>
+        </div>
+
+        <div class="max-w-7xl mx-auto border-t border-neutral-900/50 mt-8 pt-6 text-center text-[10px] text-neutral-600 tracking-widest uppercase">
+            &copy; 2026 Jansen Valentine. Desenvolvido para Alta-Costura Digital.
+        </div>
+    </footer>
+
+    <!-- Script de lógica e integração Supabase -->
+    <script>
+        // =========================================================================
+        // Configurações do Supabase (Insira suas chaves aqui)
+        // =========================================================================
+        const SUPABASE_URL = "https://noahohxckzxnglznlzei.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWhvaHhja3p4bmdsem5semVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MzQwNDYsImV4cCI6MjA5NTIxMDA0Nn0.GxM0t02PrlDPhe6GIyQtYQxyqTH--zqTMPnP0JYlLFI";
+
+        // Instanciando cliente do Supabase globalmente
+        let supabaseClient = null;
+        let localProducts = [];
+        let activeCategory = 'todos';
+
+        // Inicialização básica da aplicação
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            // Inicializar ícones da biblioteca Lucide
+            lucide.createIcons();
+        });
+
+        // Inicializar ligação e carregar dados do Supabase
+        async function initApp() {
+            if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+                showError("As credenciais do Supabase ainda não foram configuradas no código-fonte. Abra o ficheiro 'index.html' e insira a URL e a ANON_KEY nos parâmetros de configuração do script.");
+                return;
+            }
+
+            try {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                await fetchProducts();
+                
+                // Tratar rota inicial baseada em hash
+                handleRouting();
+                window.addEventListener('hashchange', handleRouting);
+            } catch (error) {
+                console.error("Erro na inicialização:", error);
+                showError("Não foi possível estabelecer uma ligação estável com a infraestrutura de dados da boutique. Por favor, tente novamente mais tarde.");
+            }
+        }
+
+        // Procurar produtos ativos no banco de dados do Supabase
+        async function fetchProducts() {
+            setLoading(true);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('produtos')
+                    .select('*')
+                    .eq('disponivel', true)
+                    .order('criado_em', { ascending: false });
+
+                if (error) throw error;
+
+                localProducts = data || [];
+                renderProducts();
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                showError("Erro ao recuperar catálogo digital. Verifique as suas políticas do banco de dados (RLS) e a tabela 'produtos'.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Renderizar os produtos no grid dinâmico
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('product-count');
+            
+            grid.innerHTML = '';
+
+            // Filtrar produtos localmente de acordo com a categoria selecionada
+            const filtered = activeCategory === 'todos' 
+                ? localProducts 
+                : localProducts.filter(p => p.categoria?.toLowerCase() === activeCategory.toLowerCase());
+
+            countLabel.textContent = `${filtered.length} ${filtered.length === 1 ? 'modelo exclusivo' : 'modelos exclusivos'} em exibição`;
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            filtered.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = "group cursor-pointer flex flex-col fade-in";
+                card.onclick = () => navigateToProduct(prod.id);
+
+                // Tratamento elegante caso o produto não possua imagem válida
+                const imgUrl = prod.imagem_url || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden bg-neutral-950 aspect-[3/4] border border-neutral-900 mb-4 sm:mb-6 group-hover:border-neutral-700 transition-all duration-500">
+                        <img 
+                            src="${imgUrl}" 
+                            alt="${prod.nome}" 
+                            class="w-full h-full object-cover object-center transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                            onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'"
+                        >
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            <span class="text-[9px] tracking-[0.2em] bg-neutral-950/90 text-white backdrop-blur px-3 py-2 border border-neutral-800 uppercase font-medium">Ver Detalhes</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div class="pr-3">
+                            <h3 class="font-serif-lux text-sm sm:text-base text-neutral-200 tracking-wide group-hover:text-[#d4af37] transition-colors duration-300 break-words leading-tight">${prod.nome}</h3>
+                            <p class="text-neutral-500 text-[10px] sm:text-[11px] mt-1 tracking-wider uppercase">${prod.categoria || 'Coleção VIP'}</p>
+                        </div>
+                        <span class="text-neutral-300 font-medium text-xs sm:text-sm tracking-wider whitespace-nowrap">${formatPrice(prod.preco)}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filtragem de Categorias
+        function filterCategory(cat) {
+            activeCategory = cat;
+            
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                const btnCat = btn.getAttribute('data-cat');
+                if (btnCat === cat) {
+                    btn.className = "cat-filter-btn px-4 py-1.5 rounded-full text-xs tracking-wider border border-neutral-800 bg-neutral-900 text-neutral-100 transition-all duration-300";
+                } else {
+                    btn.className = "cat-filter-btn px-4 py-1.5 rounded-full text-xs tracking-wider border border-transparent text-neutral-400 hover:text-white transition-all duration-300";
+                }
+            });
+
+            renderProducts();
+        }
+
+        // Roteador SPA baseado no hash (#) da URL
+        function handleRouting() {
+            const hash = window.location.hash;
+            
+            // Redefinimos todos os estados de exibição instantaneamente para evitar conflitos
+            const modal = document.getElementById('product-modal');
+            const terms = document.getElementById('terms-section');
+            const privacy = document.getElementById('privacy-section');
+            
+            modal.classList.add('hidden', 'opacity-0');
+            terms.classList.add('hidden', 'opacity-0');
+            privacy.classList.add('hidden', 'opacity-0');
+            document.body.classList.remove('overflow-hidden');
+
+            if (hash && hash.startsWith('#produto-')) {
+                const id = hash.replace('#produto-', '');
+                openProductDetails(id);
+            } else if (hash === '#termos') {
+                showSectionUI('terms-section');
+            } else if (hash === '#privacidade') {
+                showSectionUI('privacy-section');
+            }
+        }
+
+        // Alterar o hash da URL para navegar
+        function navigateToProduct(id) {
+            window.location.hash = `#produto-${id}`;
+        }
+
+        function goBackHome() {
+            window.location.hash = '';
+        }
+
+        // Exibir seções de ecrã inteiro com renderização fluida
+        function showSectionUI(sectionId) {
+            const section = document.getElementById(sectionId);
+            document.body.classList.add('overflow-hidden');
+            section.classList.remove('hidden');
+            
+            // Forçar o ciclo de renderização antes de alterar a opacidade para garantir a animação suave
+            requestAnimationFrame(() => {
+                section.classList.remove('opacity-0');
+            });
+            lucide.createIcons();
+        }
+
+        // Exibir overlay de detalhes e preencher as informações do produto
+        async function openProductDetails(id) {
+            const modal = document.getElementById('product-modal');
+            const content = document.getElementById('modal-content');
+            
+            document.body.classList.add('overflow-hidden');
+            modal.classList.remove('hidden');
+            
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+            });
+
+            // Tentar localizar na memória intermédia local antes de efetuar novo pedido
+            let product = localProducts.find(p => p.id === id);
+
+            // Carregamento direto por partilha de hiperligação externa
+            if (!product) {
+                if (!supabaseClient) {
+                    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+                        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    } else {
+                        content.innerHTML = `
+                            <div class="col-span-12 text-center py-20">
+                                <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
+                                <p class="text-sm uppercase tracking-widest text-neutral-300">Ligação necessária</p>
+                                <p class="text-xs text-neutral-500 mt-2">Configure o Supabase no código para visualizar esta peça do acervo.</p>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                        return;
+                    }
+                }
+
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('produtos')
+                        .select('*')
+                        .eq('id', id)
+                        .maybeSingle();
+
+                    if (error) throw error;
+                    product = data;
+                } catch (e) {
+                    console.error("Erro ao procurar produto específico:", e);
+                }
+            }
+
+            if (!product) {
+                content.innerHTML = `
+                    <div class="col-span-12 text-center py-20">
+                        <i data-lucide="compass" class="w-12 h-12 text-[#d4af37] mx-auto mb-4"></i>
+                        <p class="text-sm uppercase tracking-widest text-neutral-300">Peça Não Encontrada</p>
+                        <p class="text-xs text-neutral-500 mt-2">Esta criação exclusiva pode ter sido adquirida por outro cliente.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Divisão dos tamanhos e variantes por vírgula para formatação dos seletores
+            const sizes = product.tamanhos ? product.tamanhos.split(',').map(s => s.trim()) : [];
+            const variants = product.variantes ? product.variantes.split(',').map(v => v.trim()) : [];
+
+            const sizeOptionsHTML = sizes.length > 0 
+                ? sizes.map(s => `<option value="${s}" class="bg-[#050505]">${s}</option>`).join('')
+                : `<option value="Único" class="bg-[#050505]">Tamanho Único</option>`;
+
+            const variantOptionsHTML = variants.length > 0 
+                ? variants.map(v => `<option value="${v}" class="bg-[#050505]">${v}</option>`).join('')
+                : `<option value="Original" class="bg-[#050505]">Original de Ateliê</option>`;
+
+            const imgUrl = product.imagem_url || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
+
+            content.innerHTML = `
+                <!-- Imagem Responsiva -->
+                <div class="col-span-12 lg:col-span-6 flex justify-center fade-in">
+                    <div class="relative w-full aspect-[3/4] max-h-[40vh] sm:max-h-[50vh] lg:max-h-[70vh] border border-neutral-900 overflow-hidden bg-neutral-950">
+                        <img 
+                            src="${imgUrl}" 
+                            alt="${product.nome}" 
+                            class="w-full h-full object-cover object-center"
+                            onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'"
+                        >
+                    </div>
+                </div>
+
+                <!-- Painel de Compra e Detalhes Técnicos -->
+                <div class="col-span-12 lg:col-span-6 flex flex-col justify-center h-full fade-in">
+                    <div class="space-y-4 sm:space-y-6">
+                        <div>
+                            <span class="text-[9px] sm:text-[10px] tracking-[0.3em] text-[#d4af37] uppercase font-semibold block mb-1.5">${product.categoria || 'Alta Moda'}</span>
+                            <h1 class="font-serif-lux text-xl sm:text-2xl md:text-4xl text-white font-light tracking-wide leading-tight break-words">${product.nome}</h1>
+                            <p class="text-lg sm:text-xl text-neutral-300 mt-2.5 sm:mt-3 tracking-wider font-light">${formatPrice(product.preco)}</p>
+                        </div>
+
+                        <div class="w-16 h-[1px] bg-neutral-800"></div>
+
+                        <div>
+                            <h4 class="text-[9px] sm:text-xs uppercase tracking-[0.15em] text-neutral-400 font-medium mb-2">Conceito Criativo</h4>
+                            <p class="text-xs text-neutral-500 font-light leading-relaxed max-h-[150px] overflow-y-auto pr-2">
+                                ${product.descricao || 'Peça desenhada sob curadoria exclusiva no nosso ateliê.'}
+                            </p>
+                        </div>
+
+                        <!-- Seletores Técnicos -->
+                        <div class="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                            <!-- Seletor de Tamanhos -->
+                            <div class="flex flex-col">
+                                <label for="select-tamanho" class="text-[9px] sm:text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">Tamanho</label>
+                                <div class="relative">
+                                    <select id="select-tamanho" class="w-full bg-[#0d0d0d] border border-neutral-800 rounded-none px-3 py-2.5 text-xs tracking-wider text-neutral-300 focus:outline-none focus:border-[#d4af37] transition-colors duration-300 appearance-none">
+                                        ${sizeOptionsHTML}
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-500">
+                                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seletor de Variantes / Cores -->
+                            <div class="flex flex-col">
+                                <label for="select-variante" class="text-[9px] sm:text-[10px] uppercase tracking-wider text-neutral-400 mb-1.5">Cor</label>
+                                <div class="relative">
+                                    <select id="select-variante" class="w-full bg-[#0d0d0d] border border-neutral-800 rounded-none px-3 py-2.5 text-xs tracking-wider text-neutral-300 focus:outline-none focus:border-[#d4af37] transition-colors duration-300 appearance-none">
+                                        ${variantOptionsHTML}
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-500">
+                                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botão VIP de Encomenda via WhatsApp -->
+                        <div class="pt-4">
+                            <button 
+                                onclick="orderViaWhatsApp('${product.nome.replace(/'/g, "\\'")}', '${formatPrice(product.preco)}')"
+                                class="w-full py-3.5 sm:py-4 bg-[#d4af37] text-neutral-950 text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] hover:bg-white hover:text-black hover:tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3"
+                            >
+                                <i data-lucide="send" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> Encomendar via WhatsApp
+                            </button>
+                            <p class="text-[9px] text-neutral-600 text-center mt-3 tracking-widest uppercase">Os nossos estilistas entrarão em contacto de seguida para alinhar os detalhes.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Renderizar novos ícones gerados dinamicamente na modal
+            lucide.createIcons();
+        }
+
+        // Fechar detalhes do produto limpando o hash da URL
+        function closeProductDetails() {
+            window.location.hash = '';
+        }
+
+        // Reset imediato das classes da modal
+        function closeProductDetailsUI() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('hidden', 'opacity-0');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Reset imediato das seções institucionais
+        function hideSectionUI(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.add('hidden', 'opacity-0');
+        }
+
+        // Redirecionamento com o formulário estruturado para atendimento VIP no WhatsApp
+        function orderViaWhatsApp(nome, preco) {
+            const tamanho = document.getElementById('select-tamanho').value;
+            const variante = document.getElementById('select-variante').value;
+            const urlCompleta = window.location.href;
+
+            const baseMessage = 
+`Olá! Gostaria de encomendar este produto:
+Nome: ${nome}
+Tamanho: ${tamanho}
+Variante: ${variante}
+Valor: ${preco}
+Link do Produto: ${urlCompleta}`;
+
+            const urlEncoded = encodeURIComponent(baseMessage);
+            
+            // Ligação ao WhatsApp oficial fornecido pelo utilizador
+            const whatsappNumber = "5598985867414"; 
+            const finalUrl = `https://wa.me/${whatsappNumber}?text=${urlEncoded}`;
+            
+            window.open(finalUrl, '_blank');
+        }
+
+        // =========================================================================
+        // Funções Utilitárias Gerais
+        // =========================================================================
+
+        // Conversão de valor numérico simples para Moeda Localizada (BRL)
+        function formatPrice(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        // Atualizar estado visível do indicador de progresso (Spinner)
+        function setLoading(isLoading) {
+            const loader = document.getElementById('loader');
+            if (isLoading) {
+                loader.classList.remove('hidden');
+            } else {
+                loader.classList.add('hidden');
+            }
+        }
+
+        // Visualização de janelas de aviso/erro no carregamento da aplicação
+        function showError(message) {
+            const errorBox = document.getElementById('error-box');
+            const errorMessage = document.getElementById('error-message');
+            const loader = document.getElementById('loader');
+            
+            loader.classList.add('hidden');
+            errorBox.classList.remove('hidden');
+            errorMessage.textContent = message;
+        }
+    </script>
+</body>
+</html>
