@@ -1,0 +1,34 @@
+{
+  "name": "Jansen Valentine | Haute Couture",
+  "short_name": "Jansen Valentine",
+  "description": "Alta-costura contemporânea. Catálogo exclusivo de peças de ateliê, ready to wear & custom couture.",
+  "lang": "pt-PT",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

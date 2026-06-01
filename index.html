@@ -7,7 +7,37 @@
     
     <!-- Definição do Favicon Oficial da Boutique -->
     <link rel="icon" type="image/png" href="favicon.png">
-    
+
+    <!-- Metadados de SEO e Partilha Social (Open Graph / WhatsApp / Twitter) -->
+    <meta name="description" content="Jansen Valentine — alta-costura contemporânea. Peças exclusivas de ateliê, ready to wear & custom couture, desenhadas artesanalmente.">
+    <meta name="author" content="Jansen Valentine">
+    <link rel="canonical" href="https://vitaseptem.github.io/jansen.valentine/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Jansen Valentine">
+    <meta property="og:title" content="Jansen Valentine | Haute Couture">
+    <meta property="og:description" content="A expressão máxima da alta-costura contemporânea. Explore o nosso catálogo exclusivo de ateliê.">
+    <meta property="og:url" content="https://vitaseptem.github.io/jansen.valentine/">
+    <meta property="og:image" content="https://vitaseptem.github.io/jansen.valentine/logo.png">
+    <meta property="og:image:secure_url" content="https://vitaseptem.github.io/jansen.valentine/logo.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+    <meta property="og:image:alt" content="Jansen Valentine — Haute Couture">
+    <meta property="og:locale" content="pt_PT">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jansen Valentine | Haute Couture">
+    <meta name="twitter:description" content="A expressão máxima da alta-costura contemporânea.">
+    <meta name="twitter:image" content="https://vitaseptem.github.io/jansen.valentine/logo.png">
+
+    <!-- PWA: Instalação como aplicação no telemóvel (Add to Home Screen) -->
+    <meta name="theme-color" content="#050505">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Jansen Valentine">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+
     <!-- Tailwind CSS CDN para estilização moderna e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -288,8 +318,14 @@
         // =========================================================================
         // Configurações do Supabase (Insira suas chaves aqui)
         // =========================================================================
-        const SUPABASE_URL = "https://noahohxckzxnglznlzei.supabase.co"; 
+        const SUPABASE_URL = "https://noahohxckzxnglznlzei.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vYWhvaHhja3p4bmdsem5semVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MzQwNDYsImV4cCI6MjA5NTIxMDA0Nn0.GxM0t02PrlDPhe6GIyQtYQxyqTH--zqTMPnP0JYlLFI";
+
+        // =========================================================================
+        // Endereço público do site (usado nas pré-visualizações de partilha / WhatsApp).
+        // >>> ALTERE AQUI se publicar num domínio próprio. <<<
+        // =========================================================================
+        const SITE_URL = "https://vitaseptem.github.io/jansen.valentine/";
 
         // Instanciando cliente do Supabase globalmente
         let supabaseClient = null;
@@ -301,6 +337,13 @@
             initApp();
             // Inicializar ícones da biblioteca Lucide
             lucide.createIcons();
+            // Registar o Service Worker (PWA: permite instalar a app no telemóvel)
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('sw.js')
+                        .catch(err => console.warn('Falha ao registar o Service Worker:', err));
+                });
+            }
         });
 
         // Inicializar ligação e carregar dados do Supabase
@@ -376,16 +419,19 @@
 
                 // Tratamento elegante caso o produto não possua imagem válida
                 const imgUrl = prod.imagem_url || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
+                const ref = productRef(prod.id);
 
                 card.innerHTML = `
                     <div class="relative overflow-hidden bg-neutral-950 aspect-[3/4] border border-neutral-900 mb-4 sm:mb-6 group-hover:border-neutral-700 transition-all duration-500">
-                        <img 
-                            src="${imgUrl}" 
-                            alt="${prod.nome}" 
+                        <img
+                            src="${imgUrl}"
+                            alt="${prod.nome}"
                             class="w-full h-full object-cover object-center transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                             onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'"
                         >
                         <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                        <!-- Código de referência da peça sobre a imagem (estilo ecommerce de luxo) -->
+                        <span class="absolute top-3 left-3 z-10 text-[8px] sm:text-[9px] tracking-[0.18em] bg-[#050505]/75 text-[#d4af37] backdrop-blur px-2 py-1 border border-neutral-800 uppercase font-medium">${ref}</span>
                         <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                             <span class="text-[9px] tracking-[0.2em] bg-neutral-950/90 text-white backdrop-blur px-3 py-2 border border-neutral-800 uppercase font-medium">Ver Detalhes</span>
                         </div>
@@ -394,6 +440,7 @@
                         <div class="pr-3">
                             <h3 class="font-serif-lux text-sm sm:text-base text-neutral-200 tracking-wide group-hover:text-[#d4af37] transition-colors duration-300 break-words leading-tight">${prod.nome}</h3>
                             <p class="text-neutral-500 text-[10px] sm:text-[11px] mt-1 tracking-wider uppercase">${prod.categoria || 'Coleção VIP'}</p>
+                            <p class="text-neutral-600 text-[9px] sm:text-[10px] mt-0.5 tracking-[0.15em] uppercase">Ref. ${ref}</p>
                         </div>
                         <span class="text-neutral-300 font-medium text-xs sm:text-sm tracking-wider whitespace-nowrap">${formatPrice(prod.preco)}</span>
                     </div>
@@ -439,6 +486,9 @@
                 showSectionUI('terms-section');
             } else if (hash === '#privacidade') {
                 showSectionUI('privacy-section');
+            } else {
+                // De volta à página inicial: repor metadados institucionais
+                resetMeta();
             }
         }
 
@@ -536,17 +586,23 @@
                 : `<option value="Original" class="bg-[#050505]">Original de Ateliê</option>`;
 
             const imgUrl = product.imagem_url || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
+            const ref = productRef(product.id);
+
+            // Atualizar metadados (título e Open Graph) para partilha desta peça
+            updateMetaForProduct(product);
 
             content.innerHTML = `
                 <!-- Imagem Responsiva -->
                 <div class="col-span-12 lg:col-span-6 flex justify-center fade-in">
                     <div class="relative w-full aspect-[3/4] max-h-[40vh] sm:max-h-[50vh] lg:max-h-[70vh] border border-neutral-900 overflow-hidden bg-neutral-950">
-                        <img 
-                            src="${imgUrl}" 
-                            alt="${product.nome}" 
+                        <img
+                            src="${imgUrl}"
+                            alt="${product.nome}"
                             class="w-full h-full object-cover object-center"
                             onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'"
                         >
+                        <!-- Código de referência da peça sobre a imagem -->
+                        <span class="absolute top-3 left-3 z-10 text-[9px] sm:text-[10px] tracking-[0.18em] bg-[#050505]/75 text-[#d4af37] backdrop-blur px-2.5 py-1 border border-neutral-800 uppercase font-medium">${ref}</span>
                     </div>
                 </div>
 
@@ -556,6 +612,7 @@
                         <div>
                             <span class="text-[9px] sm:text-[10px] tracking-[0.3em] text-[#d4af37] uppercase font-semibold block mb-1.5">${product.categoria || 'Alta Moda'}</span>
                             <h1 class="font-serif-lux text-xl sm:text-2xl md:text-4xl text-white font-light tracking-wide leading-tight break-words">${product.nome}</h1>
+                            <p class="text-[10px] sm:text-[11px] text-neutral-500 mt-2 tracking-[0.2em] uppercase">Referência <span class="text-neutral-300">${ref}</span></p>
                             <p class="text-lg sm:text-xl text-neutral-300 mt-2.5 sm:mt-3 tracking-wider font-light">${formatPrice(product.preco)}</p>
                         </div>
 
@@ -600,7 +657,7 @@
                         <!-- Botão VIP de Encomenda via WhatsApp -->
                         <div class="pt-4">
                             <button 
-                                onclick="orderViaWhatsApp('${product.nome.replace(/'/g, "\\'")}', '${formatPrice(product.preco)}')"
+                                onclick="orderViaWhatsApp('${product.nome.replace(/'/g, "\\'")}', '${formatPrice(product.preco)}', '${ref}')"
                                 class="w-full py-3.5 sm:py-4 bg-[#d4af37] text-neutral-950 text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] hover:bg-white hover:text-black hover:tracking-[0.3em] transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3"
                             >
                                 <i data-lucide="send" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> Encomendar via WhatsApp
@@ -634,14 +691,15 @@
         }
 
         // Redirecionamento com o formulário estruturado para atendimento VIP no WhatsApp
-        function orderViaWhatsApp(nome, preco) {
+        function orderViaWhatsApp(nome, preco, ref) {
             const tamanho = document.getElementById('select-tamanho').value;
             const variante = document.getElementById('select-variante').value;
             const urlCompleta = window.location.href;
 
-            const baseMessage = 
-`Olá! Gostaria de encomendar este produto:
-Nome: ${nome}
+            const baseMessage =
+`Olá! Gostaria de encomendar esta peça:
+Produto: ${nome}
+Referência: ${ref || ''}
 Tamanho: ${tamanho}
 Variante: ${variante}
 Valor: ${preco}
@@ -659,6 +717,54 @@ Link do Produto: ${urlCompleta}`;
         // =========================================================================
         // Funções Utilitárias Gerais
         // =========================================================================
+
+        // Gerar um código de referência limpo para o cliente (estilo SKU de ecommerce)
+        // a partir do ID interno do produto (suporta UUID ou ID numérico).
+        function productRef(id) {
+            if (id === undefined || id === null) return 'JV-000000';
+            const clean = String(id).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            const tail = clean.slice(-6).padStart(6, '0');
+            return `JV-${tail}`;
+        }
+
+        // Criar/atualizar uma meta tag por atributo (property=og:* ou name=twitter:*)
+        function setMeta(key, value, attr) {
+            let el = document.querySelector(`meta[${attr}="${key}"]`);
+            if (!el) {
+                el = document.createElement('meta');
+                el.setAttribute(attr, key);
+                document.head.appendChild(el);
+            }
+            el.setAttribute('content', value);
+        }
+
+        // Atualizar título e Open Graph para a peça aberta (pré-visualização ao partilhar)
+        function updateMetaForProduct(product) {
+            const ref = productRef(product.id);
+            const title = `${product.nome} · ${ref}`;
+            const desc = (product.descricao || 'Peça exclusiva de ateliê Jansen Valentine.').slice(0, 180);
+            const img = product.imagem_url || `${SITE_URL}logo.png`;
+            const url = `${location.origin}${location.pathname}#produto-${product.id}`;
+
+            document.title = `${title} | Jansen Valentine`;
+            setMeta('og:title', `${product.nome} — ${formatPrice(product.preco)}`, 'property');
+            setMeta('og:description', desc, 'property');
+            setMeta('og:image', img, 'property');
+            setMeta('og:url', url, 'property');
+            setMeta('twitter:title', `${product.nome} — ${formatPrice(product.preco)}`, 'name');
+            setMeta('twitter:description', desc, 'name');
+            setMeta('twitter:image', img, 'name');
+        }
+
+        // Repor os metadados institucionais da boutique (página inicial)
+        function resetMeta() {
+            document.title = 'Jansen Valentine | Haute Couture';
+            setMeta('og:title', 'Jansen Valentine | Haute Couture', 'property');
+            setMeta('og:description', 'A expressão máxima da alta-costura contemporânea. Explore o nosso catálogo exclusivo de ateliê.', 'property');
+            setMeta('og:image', `${SITE_URL}logo.png`, 'property');
+            setMeta('og:url', SITE_URL, 'property');
+            setMeta('twitter:image', `${SITE_URL}logo.png`, 'name');
+        }
 
         // Conversão de valor numérico simples para Moeda Localizada (BRL)
         function formatPrice(value) {
